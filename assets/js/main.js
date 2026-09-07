@@ -33,6 +33,40 @@
     });
   }
 
+  /* ---------- email button: copy-to-clipboard fallback ----------
+     A bare mailto: link does nothing visible on a machine with no
+     default mail client configured (common on Windows without Outlook).
+     We still let that navigation attempt happen, but also copy the
+     address to the clipboard and show it in the button as feedback,
+     so the click is never a silent no-op. */
+  var emailButtons = document.querySelectorAll(".btn-email");
+
+  emailButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var mail = (btn.getAttribute("href") || "").replace(/^mailto:/, "").split("?")[0];
+      if (!mail) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(mail).catch(function () {
+          /* clipboard blocked (e.g. insecure/local context) — the
+             visible text swap below still shows the address */
+        });
+      }
+
+      var lang = root.getAttribute("data-lang") || "zh";
+      var original = btn.innerHTML;
+      btn.innerHTML = (lang === "en" ? "Copied — " : "已複製信箱 — ") + mail;
+      btn.dataset.copied = "1";
+
+      setTimeout(function () {
+        if (btn.dataset.copied === "1") {
+          btn.innerHTML = original;
+          delete btn.dataset.copied;
+        }
+      }, 2200);
+    });
+  });
+
   /* ---------- scroll reveal ---------- */
   var reveals = document.querySelectorAll(".reveal");
 
