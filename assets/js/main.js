@@ -1,7 +1,11 @@
 (function () {
   "use strict";
 
-  /* ---------- language toggle ---------- */
+  /* ---------- language toggle ----------
+     The initial language (saved choice, else browser-language guess) is
+     already applied by the inline script in <head> before this file
+     even loads — see the comment there. This block only has to handle
+     switching languages after a click. */
   var root = document.documentElement;
   var toggle = document.getElementById("langToggle");
   var STORAGE_KEY = "mch-lang";
@@ -14,16 +18,6 @@
     } catch (e) {
       /* localStorage unavailable (private mode, etc.) — fail silently */
     }
-  }
-
-  var saved = null;
-  try {
-    saved = localStorage.getItem(STORAGE_KEY);
-  } catch (e) {
-    saved = null;
-  }
-  if (saved === "en" || saved === "zh") {
-    applyLang(saved);
   }
 
   if (toggle) {
