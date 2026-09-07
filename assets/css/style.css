@@ -494,6 +494,10 @@ p {
   margin-bottom: 0.25rem;
 }
 
+.project-meta strong:not(:first-of-type) {
+  margin-top: 0.75rem;
+}
+
 .project-title {
   font-size: 1.4rem;
   margin-bottom: 0.75rem;
